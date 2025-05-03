@@ -79,12 +79,11 @@ Blockly.ScratchBlocks.ProcedureUtils.callerDomToMutation = function(xmlElement) 
   this.argumentIds_ = JSON.parse(xmlElement.getAttribute('argumentids'));
   this.warp_ = JSON.parse(xmlElement.getAttribute('warp'));
   if (xmlElement.getAttribute('colour')) {
-    this.colour_ = xmlElement.getAttribute('colour');
+    this.colours_ = Blockly.ScratchBlocks.ProcedureUtils.matchColours(
+      xmlElement.getAttribute('colour')
+    );
   }
   this.return_ = Blockly.ScratchBlocks.ProcedureUtils.parseReturnMutation(xmlElement);
-  if (this.return_ !== Blockly.PROCEDURES_CALL_TYPE_STATEMENT) {
-    this.workspace.enableProcedureReturns();
-  }
   this.updateDisplay_();
 };
 
@@ -114,6 +113,51 @@ Blockly.ScratchBlocks.ProcedureUtils.definitionMutationToDom = function(
 };
 
 /**
+ * its in the name.
+ * @param {any} x
+ * @param {any} y
+ * @returns {any}
+ */
+function nullCoalsh(x, y) {
+  if (x === null || x === (void 0)) return y;
+  return x;
+}
+
+/**
+ * Generate colours 2 - 4.
+ * @param {string} colour1 The first colour.
+ * @param {!number} ld Lighten / Darken percent as a value from 0 - 1.
+ * @returns {string[]} Colours 2 - 4.
+ * @this Blockly.Block
+ */
+Blockly.ScratchBlocks.ProcedureUtils.matchColours = function(colour1, ld) {
+  ld = nullCoalsh(ld, 0.75); // 25 percent
+  colour1 = colour1.toLowerCase();
+  var categorys = Object.values(Blockly.Categories);
+  var maybeColours = Object.entries(Blockly.Colours).find(v => (
+    categorys.includes(v[0]) && (v[1].primary.toLowerCase() === colour1)
+  ));
+  if (maybeColours && maybeColours[1]) return [
+    maybeColours[1].primary,
+    maybeColours[1].secondary,
+    maybeColours[1].tertiary,
+    maybeColours[1].quaternary || maybeColours[1].tertiary
+  ];
+  var c = parseInt(colour1.slice(1, 7), 16);
+  var rgb = [(c >> 16), ((c >> 8) & 0x00ff), (c & 0x0000ff)];
+  rgb[0] = Math.floor(rgb[0] * ld) % 256;
+  rgb[1] = Math.floor(rgb[1] * ld) % 256;
+  rgb[2] = Math.floor(rgb[2] * ld) % 256;
+  var colour2 = '#' + (
+    rgb[0].toString(16).padStart(2, '0') +
+    rgb[1].toString(16).padStart(2, '0') +
+    rgb[2].toString(16).padStart(2, '0') +
+    colour1.slice(8)
+  );
+  return [colour1, colour2, colour2/*3*/, colour2/*4*/];
+};
+
+/**
  * Parse XML to restore the (non-editable) name and arguments of a
  * procedures_prototype block or a procedures_declaration block.
  * @param {!Element} xmlElement XML storage element.
@@ -122,8 +166,11 @@ Blockly.ScratchBlocks.ProcedureUtils.definitionMutationToDom = function(
 Blockly.ScratchBlocks.ProcedureUtils.definitionDomToMutation = function(xmlElement) {
   this.procCode_ = xmlElement.getAttribute('proccode');
   this.warp_ = JSON.parse(xmlElement.getAttribute('warp'));
+
   if (xmlElement.getAttribute('colour')) {
-    this.colour_ = xmlElement.getAttribute('colour');
+    this.colours_ = Blockly.ScratchBlocks.ProcedureUtils.matchColours(
+      xmlElement.getAttribute('colour')
+    );
   }
 
   var prevArgIds = this.argumentIds_;
@@ -166,10 +213,15 @@ Blockly.ScratchBlocks.ProcedureUtils.updateDisplay_ = function() {
   var connectionMap = this.disconnectOldBlocks_();
   this.removeAllInputs_();
 
+  // We don't wanna do this on any other block's.
+  if (this.type == 'procedures_prototype' || this.type == 'procedures_call' || this.type === 'procedures_declaration') {
+    if (this.colours_) this.setColour(...this.colours_);
+    this.colours_ = null; // We don't wanna have a cache of this as it break's colour changing.
+  }
+
   this.createAllInputs_(connectionMap);
   this.deleteShadows_(connectionMap);
 
-  this.setColour(this.colour_);
   if (!wasRendered && this.getReturn) {
     this.setInputsInline(true);
     if (this.getReturn() === Blockly.PROCEDURES_CALL_TYPE_STATEMENT) {
@@ -481,9 +533,8 @@ Blockly.ScratchBlocks.ProcedureUtils.populateArgumentOnCaller_ = function(type,
     // Reattach the old block and shadow DOM.
     connectionMap[input.name] = null;
     oldBlock.outputConnection.connect(input.connection);
-    if ((type != 'b' || type != 'o' || type != 'a') && this.generateShadows_) {
+    if ((type == 's' || type == 'n') && this.generateShadows_) {
       var shadowDom = oldShadow || this.buildShadowDom_(type);
-      console.log("setting shadow dom: " + shadowDom);
       input.connection.setShadowDom(shadowDom);
     }
   } else if (this.generateShadows_) {
@@ -1029,8 +1080,21 @@ Blockly.Blocks['procedures_declaration'] = {
   addObjectExternal: Blockly.ScratchBlocks.ProcedureUtils.addObjectExternal,
   addArrayExternal: Blockly.ScratchBlocks.ProcedureUtils.addArrayExternal,
   addStringNumberExternal: Blockly.ScratchBlocks.ProcedureUtils.addStringNumberExternal,
-  onChangeFn: Blockly.ScratchBlocks.ProcedureUtils.updateDeclarationProcCode_
+  onChangeFn: Blockly.ScratchBlocks.ProcedureUtils.updateDeclarationProcCode_,
+  // For colour fixing of the fields when on the GUI side look at the GUI!!!.
 };
+
+// marker
+/** @this Blockly.Block */
+function argumentReporterMutationToDom() {
+ if (!this.rendered || this.isShadow_) return document.createElement('mutation'); // Don't save the colour if we are a shadow.
+ return Blockly.ColourMutation.mutationToDom.call(this, Blockly.Colours.more);
+}
+/** @this Blockly.Block */
+function argumentReporterDomToMutation(node) {
+  if (this.isShadow_) return null; // Don't apply the colour if we are a shadow.
+  return Blockly.ColourMutation.domToMutation.call(this, node);
+}
 
 Blockly.Blocks['argument_reporter_boolean'] = {
   init: function() {
@@ -1044,7 +1108,9 @@ Blockly.Blocks['argument_reporter_boolean'] = {
       ],
       "extensions": ["colours_more", "output_boolean"]
     });
-  }
+  },
+  mutationToDom: argumentReporterMutationToDom,
+  domToMutation: argumentReporterDomToMutation
 };
 
 Blockly.Blocks['argument_reporter_object'] = {
@@ -1059,7 +1125,9 @@ Blockly.Blocks['argument_reporter_object'] = {
       ],
       "extensions": ["colours_more", "output_object"]
     });
-  }
+  },
+  mutationToDom: argumentReporterMutationToDom,
+  domToMutation: argumentReporterDomToMutation
 };
 
 Blockly.Blocks['argument_reporter_array'] = {
@@ -1074,7 +1142,9 @@ Blockly.Blocks['argument_reporter_array'] = {
       ],
       "extensions": ["colours_more", "output_array"]
     });
-  }
+  },
+  mutationToDom: argumentReporterMutationToDom,
+  domToMutation: argumentReporterDomToMutation
 };
 
 Blockly.Blocks['argument_reporter_string_number'] = {
@@ -1089,7 +1159,9 @@ Blockly.Blocks['argument_reporter_string_number'] = {
       ],
       "extensions": ["colours_more", "output_number", "output_string"]
     });
-  }
+  },
+  mutationToDom: argumentReporterMutationToDom,
+  domToMutation: argumentReporterDomToMutation
 };
 
 Blockly.Blocks['argument_editor_boolean'] = {
@@ -1192,6 +1264,5 @@ Blockly.Blocks['procedures_return'] = {
       ],
       "extensions": ["colours_more", "shape_end"]
     });
-    this.workspace.enableProcedureReturns();
   }
 };
