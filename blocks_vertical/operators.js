@@ -400,6 +400,35 @@ Blockly.Blocks['operator_and'] = {
   }
 };
 
+Blockly.Blocks['operator_extendable_and'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "BOOLS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "BOOL",
+              "check": "Boolean"
+            },
+          ],
+          "separator": "and",
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_boolean"]
+    });
+  }
+};
+
 Blockly.Blocks['operator_or'] = {
   /**
    * Block for "or" boolean comparator.
@@ -419,6 +448,35 @@ Blockly.Blocks['operator_or'] = {
           "name": "OPERAND2",
           "check": "Boolean"
         }
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_boolean"]
+    });
+  }
+};
+
+Blockly.Blocks['operator_extendable_or'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "BOOLS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "BOOL",
+              "check": "Boolean"
+            },
+          ],
+          "separator": "or",
+          "minInputs": 2,
+        },
       ],
       "category": Blockly.Categories.operators,
       "extensions": ["colours_operators", "output_boolean"]
