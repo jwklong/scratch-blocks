@@ -529,6 +529,36 @@ Blockly.Blocks['operator_join'] = {
   }
 };
 
+Blockly.Blocks['operator_extendable_join'] = {
+  /**
+   * Block for string join operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "join %1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "STRINGS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "STRING",
+              "shadowOpcode": "text",
+              "shadowFieldName": "TEXT",
+              "shadowFieldValue": "apple"
+            },
+          ],
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_string"]
+    });
+  }
+};
+
 Blockly.Blocks['operator_letter_of'] = {
   /**
    * Block for "letter _ of _" operator.
