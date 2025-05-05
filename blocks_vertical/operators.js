@@ -27,7 +27,6 @@ goog.require('Blockly.Colours');
 goog.require('Blockly.constants');
 goog.require('Blockly.ScratchBlocks.VerticalExtensions');
 
-
 Blockly.Blocks['operator_add'] = {
   /**
    * Block for adding two numbers.
@@ -45,6 +44,37 @@ Blockly.Blocks['operator_add'] = {
           "type": "input_value",
           "name": "NUM2"
         }
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+
+Blockly.Blocks['operator_extendable_add'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "NUMS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "shadowOpcode": "math_number",
+              "shadowFieldName": "NUM",
+              "shadowFieldValue": 0
+            },
+          ],
+          "separator": "+",
+          "minInputs": 2,
+        },
       ],
       "category": Blockly.Categories.operators,
       "extensions": ["colours_operators", "output_number"]
@@ -76,6 +106,37 @@ Blockly.Blocks['operator_subtract'] = {
   }
 };
 
+Blockly.Blocks['operator_extendable_subtract'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "NUMS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "shadowOpcode": "math_number",
+              "shadowFieldName": "NUM",
+              "shadowFieldValue": 0
+            },
+          ],
+          "separator": "-",
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+
 Blockly.Blocks['operator_multiply'] = {
   /**
    * Block for multiplying two numbers.
@@ -100,6 +161,37 @@ Blockly.Blocks['operator_multiply'] = {
   }
 };
 
+Blockly.Blocks['operator_extendable_multiply'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "NUMS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "shadowOpcode": "math_number",
+              "shadowFieldName": "NUM",
+              "shadowFieldValue": 0
+            },
+          ],
+          "separator": "*",
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+
 Blockly.Blocks['operator_divide'] = {
   /**
    * Block for dividing two numbers.
@@ -117,6 +209,68 @@ Blockly.Blocks['operator_divide'] = {
           "type": "input_value",
           "name": "NUM2"
         }
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+
+Blockly.Blocks['operator_extendable_divide'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "NUMS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "shadowOpcode": "math_number",
+              "shadowFieldName": "NUM",
+              "shadowFieldValue": 0
+            },
+          ],
+          "separator": "/",
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.operators,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+
+Blockly.Blocks['operator_extendable_exponate'] = {
+  /**
+   * Block for adding two numbers.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "NUMS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "shadowOpcode": "math_number",
+              "shadowFieldName": "NUM",
+              "shadowFieldValue": 0
+            },
+          ],
+          "separator": "^",
+          "minInputs": 2,
+        },
       ],
       "category": Blockly.Categories.operators,
       "extensions": ["colours_operators", "output_number"]

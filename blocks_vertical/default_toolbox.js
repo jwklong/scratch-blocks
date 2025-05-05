@@ -296,8 +296,7 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
       '</value>' +
     '</block>' +
     '<block type="control_forever" id="control_forever"></block>' +
-    '<block type="control_if" id="control_if"></block>' +
-    '<block type="control_if_else" id="control_if_else"></block>' +
+    '<block type="control_extendable_if"></block>' +
     '<block type="control_wait_until" id="control_wait_until"></block>' +
     '<block type="control_repeat_until" id="control_repeat_until"></block>' +
     '<block type="control_stop" id="control_stop"></block>' +
@@ -354,54 +353,11 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
     '<block type="sensing_dayssince2000" id="sensing_dayssince2000"></block>' +
   '</category>' +
   '<category name="%{BKY_CATEGORY_OPERATORS}" id="operators" colour="#40BF4A" secondaryColour="#389438">' +
-    '<block type="operator_add" id="operator_add">' +
-      '<value name="NUM1">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-      '<value name="NUM2">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-    '</block>' +
-    '<block type="operator_subtract" id="operator_subtract">' +
-      '<value name="NUM1">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-      '<value name="NUM2">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-    '</block>' +
-    '<block type="operator_multiply" id="operator_multiply">' +
-      '<value name="NUM1">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-      '<value name="NUM2">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-    '</block>' +
-    '<block type="operator_divide" id="operator_divide">' +
-      '<value name="NUM1">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-      '<value name="NUM2">' +
-        '<shadow type="math_number">' +
-          '<field name="NUM"></field>' +
-        '</shadow>' +
-      '</value>' +
-    '</block>' +
+    '<block type="operator_extendable_add"></block>' +
+    '<block type="operator_extendable_subtract"></block>' +
+    '<block type="operator_extendable_multiply"></block>' +
+    '<block type="operator_extendable_divide"></block>' +
+    '<block type="operator_extendable_exponate"></block>' +
     '<block type="operator_random" id="operator_random">' +
       '<value name="FROM">' +
         '<shadow type="math_number">' +

@@ -169,6 +169,52 @@ Blockly.Blocks['control_if_else'] = {
   }
 };
 
+Blockly.Blocks['control_extendable_if'] = {
+  /**
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1 %2",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "SUBSTACKS",
+          "args": [
+            "if",
+            {
+              "type": "input_value",
+              "name": "CONDITION",
+              "check": "Boolean"
+            },
+            "then",
+            {
+              "type": "input_statement",
+              "name": "SUBSTACK",
+            },
+          ],
+          "separator": "else",
+          "minInputs": 1,
+        },
+        {
+          "type": "extendable",
+          "name": "ELSE",
+          "args": [
+            "else",
+            {
+              "type": "input_statement",
+              "name": "SUBSTACK",
+            },
+          ],
+          "maxInputs": 1,
+        }
+      ],
+      "category": Blockly.Categories.control,
+      "extensions": ["colours_control", "shape_statement"]
+    });
+  }
+};
+
 Blockly.Blocks['control_stop'] = {
   /**
    * Block for stop all scripts.
