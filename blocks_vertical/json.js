@@ -232,6 +232,34 @@ Blockly.Blocks['json_merge_object'] = {
   }
 };
 
+Blockly.Blocks['json_extendable_merge_object'] = {
+  /**
+   * Merges two Objects
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "merge %1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "OBJECTS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "OBJECT",
+              "check": "Object"
+            },
+          ],
+          "minInputs": 2,
+        },
+      ],
+      "category": Blockly.Categories.json,
+      "extensions": ["colours_json", "output_object"]
+    });
+  }
+};
+
 Blockly.Blocks['json_has_key'] = {
   /**
    * Checks if object has target key
@@ -266,6 +294,35 @@ Blockly.Blocks['json_new_array'] = {
     this.jsonInit({
       "message0": Blockly.Msg.JSON_NEW_ARRAY,
       "category": Blockly.Categories.json,
+      "extensions": ["colours_json", "output_array"]
+    });
+  }
+};
+
+Blockly.Blocks['json_extendable_array'] = {
+  /**
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "new array with %1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "STRINGS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "STRING",
+              "shadowOpcode": "text",
+              "shadowFieldName": "TEXT",
+              "shadowFieldValue": "apple"
+            },
+          ],
+          "minInputs": 1,
+        },
+      ],
+      "category": Blockly.Categories.operators,
       "extensions": ["colours_json", "output_array"]
     });
   }
@@ -466,6 +523,34 @@ Blockly.Blocks['json_merge_array'] = {
           "name": "ARR2",
           "check": "Array"
         }
+      ],
+      "category": Blockly.Categories.json,
+      "extensions": ["colours_json", "output_array"]
+    });
+  }
+};
+
+Blockly.Blocks['json_extendable_merge_array'] = {
+  /**
+   * Merges two Objects
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "merge %1",
+      "args0": [
+        {
+          "type": "extendable",
+          "name": "ARRAYS",
+          "args": [
+            {
+              "type": "input_value",
+              "name": "ARRAY",
+              "check": "Array"
+            },
+          ],
+          "minInputs": 2,
+        },
       ],
       "category": Blockly.Categories.json,
       "extensions": ["colours_json", "output_array"]
